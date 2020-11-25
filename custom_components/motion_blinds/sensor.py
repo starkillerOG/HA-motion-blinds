@@ -69,7 +69,7 @@ class MotionBatterySensor(CoordinatorEntity, Entity):
     @property
     def name(self):
         """Return the name of the blind battery sensor."""
-        return f"{self._blind.blind_type}-battery-{self._blind.mac}"
+        return f"{self._blind.blind_type}-battery-{self._blind.mac[12:]}"
 
     @property
     def unit_of_measurement(self):
@@ -89,9 +89,7 @@ class MotionBatterySensor(CoordinatorEntity, Entity):
     @property
     def device_state_attributes(self):
         """Return device specific state attributes."""
-        attributes = {}
-        attributes[ATTR_BATTERY_VOLTAGE] = self._blind.battery_voltage
-        return attributes
+        return {ATTR_BATTERY_VOLTAGE: self._blind.battery_voltage}
 
 
 class MotionTDBUBatterySensor(MotionBatterySensor):
@@ -115,7 +113,7 @@ class MotionTDBUBatterySensor(MotionBatterySensor):
     @property
     def name(self):
         """Return the name of the blind battery sensor."""
-        return f"{self._blind.blind_type}-{self._motor}-battery-{self._blind.mac}"
+        return f"{self._blind.blind_type}-{self._motor}-battery-{self._blind.mac[12:]}"
 
     @property
     def state(self):
@@ -160,7 +158,7 @@ class MotionSignalStrengthSensor(CoordinatorEntity, Entity):
         """Return the name of the blind signal strength sensor."""
         if self._device_type == TYPE_GATEWAY:
             return "Motion gateway signal strength"
-        return f"{self._device.blind_type} signal strength - {self._device.mac}"
+        return f"{self._device.blind_type} signal strength - {self._device.mac[12:]}"
 
     @property
     def unit_of_measurement(self):
@@ -171,6 +169,11 @@ class MotionSignalStrengthSensor(CoordinatorEntity, Entity):
     def device_class(self):
         """Return the device class of this entity."""
         return DEVICE_CLASS_SIGNAL_STRENGTH
+
+    @property
+    def entity_registry_enabled_default(self):
+        """Return if the entity should be enabled when first added to the entity registry."""
+        return False
 
     @property
     def state(self):

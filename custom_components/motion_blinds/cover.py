@@ -113,7 +113,7 @@ class MotionPositionDevice(CoordinatorEntity, CoverEntity):
         device_info = {
             "identifiers": {(DOMAIN, self._blind.mac)},
             "manufacturer": MANUFACTURER,
-            "name": f"{self._blind.blind_type}-{self._blind.mac}",
+            "name": f"{self._blind.blind_type}-{self._blind.mac[12:]}",
             "model": self._blind.blind_type,
             "via_device": (DOMAIN, self._config_entry.unique_id),
         }
@@ -123,7 +123,7 @@ class MotionPositionDevice(CoordinatorEntity, CoverEntity):
     @property
     def name(self):
         """Return the name of the blind."""
-        return f"{self._blind.blind_type}-{self._blind.mac}"
+        return f"{self._blind.blind_type}-{self._blind.mac[12:]}"
 
     @property
     def current_cover_position(self):
@@ -156,9 +156,8 @@ class MotionPositionDevice(CoordinatorEntity, CoverEntity):
 
     def set_cover_position(self, **kwargs):
         """Move the cover to a specific position."""
-        if ATTR_POSITION in kwargs:
-            position = kwargs[ATTR_POSITION]
-            self._blind.Set_position(100 - position)
+        position = kwargs[ATTR_POSITION]
+        self._blind.Set_position(100 - position)
 
     def stop_cover(self, **kwargs):
         """Stop the cover."""
@@ -189,9 +188,8 @@ class MotionTiltDevice(MotionPositionDevice):
 
     def set_cover_tilt_position(self, **kwargs):
         """Move the cover tilt to a specific position."""
-        if ATTR_TILT_POSITION in kwargs:
-            angle = kwargs[ATTR_TILT_POSITION] * 180 / 100
-            self._blind.Set_angle(angle)
+        angle = kwargs[ATTR_TILT_POSITION] * 180 / 100
+        self._blind.Set_angle(angle)
 
     def stop_cover_tilt(self, **kwargs):
         """Stop the cover."""
@@ -218,7 +216,7 @@ class MotionTDBUDevice(MotionPositionDevice):
     @property
     def name(self):
         """Return the name of the blind."""
-        return f"{self._blind.blind_type}-{self._motor}-{self._blind.mac}"
+        return f"{self._blind.blind_type}-{self._motor}-{self._blind.mac[12:]}"
 
     @property
     def current_cover_position(self):
@@ -250,9 +248,8 @@ class MotionTDBUDevice(MotionPositionDevice):
 
     def set_cover_position(self, **kwargs):
         """Move the cover to a specific position."""
-        if ATTR_POSITION in kwargs:
-            position = kwargs[ATTR_POSITION]
-            self._blind.Set_position(100 - position, motor=self._motor_key)
+        position = kwargs[ATTR_POSITION]
+        self._blind.Set_position(100 - position, motor=self._motor_key)
 
     def stop_cover(self, **kwargs):
         """Stop the cover."""

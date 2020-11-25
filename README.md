@@ -1,8 +1,9 @@
 # HA-motion-blinds
  HomeAssistant integration for Motion Blinds.
  
- Eventually this custom component will end up in the official HomeAssistant code, untill then you can use it as a custom component.
- The link to the Pull Request for the official HomeAssistant component is here: https://github.com/home-assistant/core/pull/42989
+ This custom component has already been accepted as an official HomeAssistant integration.
+ As of December 13th 2020 it is included in HomeAssistant version 0.119.
+ Therefore this repositry will not be updated anymore, the official HomeAssistant component schould be used instead.
 
 # How to use
 1) Download this repository by selecting the green "Code" button (top left) and hit "Download ZIP"
