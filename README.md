@@ -2,7 +2,7 @@
  HomeAssistant integration for Motion Blinds.
  
  This custom component has already been accepted as an official HomeAssistant integration.
- As of December 13th 2020 it is included in HomeAssistant version 0.119.
+ As of December 13th 2020 it is included in HomeAssistant version 2020.12.0.
  Therefore this repositry will not be updated anymore, the official HomeAssistant component schould be used instead.
 
 # How to use
