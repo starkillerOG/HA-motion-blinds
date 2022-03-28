@@ -10,10 +10,8 @@ from homeassistant.const import CONF_API_KEY, CONF_HOST
 from homeassistant.core import callback
 
 from .const import (
-    CONF_FAST_UPDATE,
     CONF_INTERFACE,
     CONF_WAIT_FOR_PUSH,
-    DEFAULT_FAST_UPDATE,
     DEFAULT_GATEWAY_NAME,
     DEFAULT_INTERFACE,
     DEFAULT_WAIT_FOR_PUSH,
@@ -47,12 +45,6 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
                     CONF_WAIT_FOR_PUSH,
                     default=self.config_entry.options.get(
                         CONF_WAIT_FOR_PUSH, DEFAULT_WAIT_FOR_PUSH
-                    ),
-                ): bool,
-                vol.Optional(
-                    CONF_FAST_UPDATE,
-                    default=self.config_entry.options.get(
-                        CONF_FAST_UPDATE, DEFAULT_FAST_UPDATE
                     ),
                 ): bool,
             }
@@ -146,7 +138,13 @@ class MotionBlindsFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             mac_address = motion_gateway.mac
 
             await self.async_set_unique_id(mac_address)
-            self._abort_if_unique_id_configured()
+            self._abort_if_unique_id_configured(
+                updates={
+                    CONF_HOST: self._host,
+                    CONF_API_KEY: key,
+                    CONF_INTERFACE: multicast_interface,
+                }
+            )
 
             return self.async_create_entry(
                 title=DEFAULT_GATEWAY_NAME,
@@ -174,7 +172,7 @@ class MotionBlindsFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
     async def async_get_interfaces(self):
         """Get list of interface to use."""
-        interfaces = [DEFAULT_INTERFACE]
+        interfaces = [DEFAULT_INTERFACE, "0.0.0.0"]
         enabled_interfaces = []
         default_interface = DEFAULT_INTERFACE
 
